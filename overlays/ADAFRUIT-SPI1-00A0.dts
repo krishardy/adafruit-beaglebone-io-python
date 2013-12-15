@@ -45,12 +45,12 @@
             pinctrl-names    = "default";
             pinctrl-0        = <&pinctrl_spi1>;    
 
-            spidev@0{
+            spidev@2{
                 compatible           = "spidev";
                 reg               = <0>;
                 spi-max-frequency = <24000000>;
             };
-            spidev@1{
+            spidev@3{
                 compatible           = "spidev";
                 reg               = <1>;
                 spi-max-frequency = <24000000>;

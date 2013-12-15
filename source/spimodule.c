@@ -679,22 +679,26 @@ static PyObject *
 SPI_open(SPI *self, PyObject *args, PyObject *kwds)
 {
 	int bus, device;
+	unsigned char loadDTO = 1;
 	int max_dt_length = 15;
 	char device_tree_name[max_dt_length];
 	char path[MAXPATH];
 	uint8_t tmp8;
 	uint32_t tmp32;	
-	static char *kwlist[] = {"bus", "device", NULL};
-	if (!PyArg_ParseTupleAndKeywords(args, kwds, "ii:open", kwlist, &bus, &device))
+	static char *kwlist[] = {"bus", "device", "loadDTO", NULL};
+	if (!PyArg_ParseTupleAndKeywords(args, kwds, "ii|b:open", kwlist, &bus, &device, &loadDTO))
 		return NULL;
-	if (snprintf(device_tree_name, max_dt_length, "ADAFRUIT-SPI%d", bus) >= max_dt_length) {
-		PyErr_SetString(PyExc_OverflowError,
-			"Bus and/or device number is invalid.");
-		return NULL;
-	}
-	if (load_device_tree(device_tree_name) == -1) {
-		PyErr_SetFromErrno(PyExc_IOError);
-		return NULL;
+
+	if (loadDTO > 0) {
+		if (snprintf(device_tree_name, max_dt_length, "ADAFRUIT-SPI%d", bus) >= max_dt_length) {
+			PyErr_SetString(PyExc_OverflowError,
+				"Bus and/or device number is invalid.");
+			return NULL;
+		}
+		if (load_device_tree(device_tree_name) == -1) {
+			PyErr_SetFromErrno(PyExc_IOError);
+			return NULL;
+		}
 	}
 
 	if (snprintf(path, MAXPATH, "/dev/spidev%d.%d", bus+1, device) >= MAXPATH) {
