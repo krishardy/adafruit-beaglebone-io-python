@@ -1,5 +1,7 @@
 NTPDATE=/usr/sbin/ntpdate
 
+default: build
+
 time:
 	$(NTPDATE) -b -s -u pool.ntp.org
 
@@ -14,7 +16,7 @@ clean:
 tests:
 	py.test
 
-build:
+build: time
 	python setup.py build --force
 
 install: build
