@@ -1,5 +1,7 @@
+NTPDATE=/usr/sbin/ntpdate
+
 time:
-	/usr/bin/ntpdate -b -s -u pool.ntp.org
+	$(NTPDATE) -b -s -u pool.ntp.org
 
 publish: clean
 	python setup.py sdist upload
